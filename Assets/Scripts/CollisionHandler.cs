@@ -2,9 +2,32 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 public class CollisionHandler : MonoBehaviour
 {
+    //PARAMETERS - for tuning, typically set in the editor
+    //CACHE - e.g. references for readability or speed
+    //STATE - private instance (member) variables
+
     [SerializeField] float levelLoadDelay= 2f;
+    [SerializeField] AudioClip crash;
+    [SerializeField] AudioClip success;
+
+    [SerializeField] ParticleSystem crashParticles;
+    [SerializeField] ParticleSystem successParticles;
+
+    AudioSource audioSource;
+
+    bool isTransitioning = false;
+
+    void Start() 
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     void OnCollisionEnter(Collision other) 
     {
+        if(isTransitioning)
+        {
+            return;
+        }
        switch (other.gameObject.tag) 
        {
            case "Friendly":
@@ -21,15 +44,19 @@ public class CollisionHandler : MonoBehaviour
 
     void StartSuccessSqeuence()
     {
-        //todo add SFX upon crash
-        //todo add particle effect upon crash
+        isTransitioning = true;
+        audioSource.Stop();
+        successParticles.Play();
+        audioSource.PlayOneShot(success);
         GetComponent<Movement>().enabled = false;
         Invoke("LoadNextLevel",levelLoadDelay);
     }
     void StartCrashSequence()
     {
-        //todo add SFX upon crash
-        //todo add particle effect upon crash
+        isTransitioning = true;
+        crashParticles.Play();
+        audioSource.Stop();
+        audioSource.PlayOneShot(crash);
         GetComponent<Movement>().enabled = false;
         Invoke("ReloadLevel",levelLoadDelay);
     }
