@@ -1,2 +1,2 @@
-# Project-Boost
+# Project-Infinity
  Repo for a Game 
