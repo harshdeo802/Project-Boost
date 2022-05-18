@@ -53,12 +53,14 @@ public class CollisionHandler : MonoBehaviour
                 break;
            case "Finish":
                 StartSuccessSqeuence();
-                break;
+                break;    
            default :
                StartCrashSequence();
                break;
        }    
     }
+
+
 
     void StartSuccessSqeuence()
     {
@@ -94,4 +96,5 @@ public class CollisionHandler : MonoBehaviour
         }
         SceneManager.LoadScene(nextSceneIndex);
     }
+    
 }
